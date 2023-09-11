@@ -5,7 +5,10 @@ import { useFonts, Roboto_400Regular, Roboto_700Bold } from "@expo-google-fonts/
 import { Loading } from "./src/components/Loading";
 import { StatusBar } from "react-native";
 
-import { ANDROID_CLIENT_ID } from "@env";
+import { AppProvider, UserProvider } from '@realm/react';
+
+import { REALM_APP_ID } from "@env";
+import { Home } from "./src/screens/Home/index.";
 
 export default function App() {
   const [fontsLoaded] = useFonts({Roboto_400Regular, Roboto_700Bold})
@@ -20,9 +23,13 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <StatusBar barStyle='light-content' backgroundColor='transparent' translucent />
-      <SignIn />
-    </ThemeProvider>
+    <AppProvider id={REALM_APP_ID}>
+      <ThemeProvider theme={theme}>
+        <StatusBar barStyle='light-content' backgroundColor='transparent' translucent />
+        <UserProvider fallback={SignIn}>
+          <Home />
+        </UserProvider>
+      </ThemeProvider>
+    </AppProvider>
   );
 }
